@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas - Decentralized AI Infrastructure for Everyone</title>
+  <meta name="description" content="Atlas is a decentralized IaaS platform for fine-tuning and serving AI models. Blockchain-coordinated, community-powered, open to all.">
+  <meta name="keywords" content="decentralized AI, federated learning, blockchain, open source, distributed computing, AI infrastructure, Web3, LoRA fine-tuning, IPFS, Cosmos SDK">
+  <meta name="author" content="Atlas Contributors">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Atlas - Decentralized AI Infrastructure for Everyone">
+  <meta property="og:description" content="A decentralized IaaS platform for fine-tuning and serving AI models. Blockchain-coordinated, community-powered.">
+  <meta property="og:url" content="https://github.com/iamkyr0/atlas">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Atlas - Decentralized AI Infrastructure for Everyone">
+  <meta name="twitter:description" content="A decentralized IaaS platform for fine-tuning and serving AI models.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <meta name="theme-color" content="#0a0f1a">
+  
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --background: #0a0f1a;
+      --foreground: #f8fafc;
+      --card: #0f1629;
+      --muted: #1e293b;
+      --muted-foreground: #94a3b8;
+      --primary: #00ffff;
+      --secondary: #a78bfa;
+      --border: #1e3a5f;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, #080c14, #0a0f1a);
+      color: var(--foreground);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Text Gradient */
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--background);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--secondary);
+      border: 1px solid rgba(167, 139, 250, 0.5);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(167, 139, 250, 0.1);
+      border-color: var(--secondary);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted-foreground);
+    }
+
+    .btn-ghost:hover {
+      color: var(--foreground);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: rgba(15, 22, 41, 0.5);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(30, 58, 95, 0.5);
+      border-radius: 1rem;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+    }
+
+    /* ========== HERO SECTION ========== */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(0, 255, 255, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-glow-2 {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(167, 139, 250, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .hero-logo {
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-underline {
+      width: 8rem;
+      height: 4px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+      background-size: 200% 100%;
+      border-radius: 2px;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      color: rgba(248, 250, 252, 0.9);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.75rem;
+      animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+      color: var(--muted-foreground);
+      max-width: 40rem;
+      margin: 0 auto 3rem;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .scroll-indicator-inner {
+      width: 1.5rem;
+      height: 2.5rem;
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 1rem;
+      display: flex;
+      justify-content: center;
+      padding-top: 0.5rem;
+    }
+
+    .scroll-dot {
+      width: 6px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 3px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========== SECTIONS ========== */
+    section {
+      padding: 8rem 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--muted-foreground);
+      text-align: center;
+      max-width: 40rem;
+      margin: 0 auto 4rem;
+    }
+
+    /* ========== WHY ATLAS ========== */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+
+    .value-card {
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: scale(1.02);
+    }
+
+    .value-icon {
+      display: inline-flex;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .value-icon.cyan {
+      background: rgba(0, 255, 255, 0.1);
+      color: var(--primary);
+    }
+
+    .value-icon.purple {
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--secondary);
+    }
+
+    .value-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .value-description {
+      color: var(--muted-foreground);
+    }
+
+    /* ========== FEATURES ========== */
+    #features {
+      background: linear-gradient(180deg, transparent, rgba(15, 22, 41, 0.3), transparent);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: rgba(15, 22, 41, 0.3);
+      border: 1px solid rgba(30, 58, 95, 0.5);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0), transparent);
+      transition: all 0.5s ease;
+    }
+
+    .feature-card:hover::before {
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.5), transparent);
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 255, 255, 0.4);
+      background: rgba(15, 22, 41, 0.5);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .feature-icon {
+      flex-shrink: 0;
+      padding: 0.625rem;
+      border-radius: 0.5rem;
+      background: rgba(30, 41, 59, 0.5);
+      color: var(--primary);
+      transition: background 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 0.375rem;
+      transition: color 0.3s ease;
+    }
+
+    .feature-card:hover .feature-title {
+      color: var(--primary);
+    }
+
+    .feature-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* ========== ARCHITECTURE ========== */
+    .architecture-diagram {
+      padding: 2rem;
+      max-width: 60rem;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .architecture-diagram {
+        padding: 3rem;
+      }
+    }
+
+    .arch-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .arch-grid {
+        grid-template-columns: 1fr auto 1fr;
+      }
+    }
+
+    .arch-node {
+      text-align: center;
+    }
+
+    .arch-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .arch-box.primary {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .arch-box.secondary {
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+    }
+
+    .arch-box.muted {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border);
+    }
+
+    .arch-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .arch-title {
+      font-weight: 600;
+    }
+
+    .arch-subtitle {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .arch-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .arch-arrows {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .arch-arrow {
+      color: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .arch-arrow-label {
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+    }
+
+    .arch-ipfs {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+    }
+
+    .arch-blockchain {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(30, 58, 95, 0.5);
+      text-align: center;
+    }
+
+    .arch-blockchain-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(167, 139, 250, 0.1));
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      max-width: 25rem;
+    }
+
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .tech-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border);
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ========== ROADMAP ========== */
+    #roadmap {
+      background: linear-gradient(180deg, transparent, rgba(15, 22, 41, 0.3), transparent);
+    }
+
+    .roadmap-container {
+      max-width: 48rem;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 22px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary), var(--secondary), rgba(148, 163, 184, 0.2));
+    }
+
+    .milestone {
+      position: relative;
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .milestone:hover {
+      transform: scale(1.01);
+    }
+
+    .milestone.done {
+      border-color: rgba(0, 255, 255, 0.5);
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    .milestone.in-progress {
+      border-color: rgba(167, 139, 250, 0.5);
+      background: rgba(167, 139, 250, 0.05);
+      box-shadow: 0 10px 40px rgba(167, 139, 250, 0.1);
+    }
+
+    .milestone.upcoming {
+      border-color: rgba(30, 58, 95, 0.5);
+      background: rgba(15, 22, 41, 0.3);
+    }
+
+    .milestone-indicator {
+      flex-shrink: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      background: var(--background);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .milestone-content {
+      flex: 1;
+    }
+
+    .milestone-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .milestone-title {
+      font-weight: 600;
+    }
+
+    .milestone-badge {
+      padding: 0.125rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 9999px;
+    }
+
+    .milestone-badge.done {
+      background: rgba(0, 255, 255, 0.2);
+      color: var(--primary);
+    }
+
+    .milestone-badge.in-progress {
+      background: rgba(167, 139, 250, 0.2);
+      color: var(--secondary);
+    }
+
+    .milestone-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* ========== GET INVOLVED ========== */
+    .pathways-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 60rem;
+      margin: 0 auto 3rem;
+    }
+
+    .pathway-card {
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .pathway-card:hover {
+      transform: scale(1.02);
+    }
+
+    .pathway-icon {
+      display: inline-flex;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pathway-icon.cyan {
+      background: rgba(0, 255, 255, 0.1);
+      color: var(--primary);
+    }
+
+    .pathway-icon.purple {
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--secondary);
+    }
+
+    .pathway-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .pathway-description {
+      color: var(--muted-foreground);
+      margin-bottom: 1.5rem;
+    }
+
+    .pathway-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pathway-btn.cyan {
+      border-color: rgba(0, 255, 255, 0.3);
+      color: var(--primary);
+    }
+
+    .pathway-btn.cyan:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .pathway-btn.purple {
+      border-color: rgba(167, 139, 250, 0.3);
+      color: var(--secondary);
+    }
+
+    .pathway-btn.purple:hover {
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .quick-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .quick-link:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    /* ========== VISION ========== */
+    #vision {
+      background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.03), transparent);
+    }
+
+    .vision-content {
+      max-width: 56rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .vision-quote {
+      position: relative;
+    }
+
+    .vision-quote-mark {
+      position: absolute;
+      top: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 6rem;
+      color: rgba(0, 255, 255, 0.2);
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .vision-quote-text {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 300;
+      line-height: 1.4;
+      margin-bottom: 2rem;
+    }
+
+    .vision-paragraphs {
+      font-size: 1.125rem;
+      color: var(--muted-foreground);
+      line-height: 1.8;
+    }
+
+    .vision-paragraphs p {
+      margin-bottom: 1.5rem;
+    }
+
+    .vision-paragraphs strong {
+      color: var(--foreground);
+      font-weight: 500;
+    }
+
+    .vision-closing {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(30, 58, 95, 0.5);
+    }
+
+    .vision-closing-text {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      padding: 4rem 0;
+      border-top: 1px solid rgba(30, 58, 95, 0.5);
+    }
+
+    .footer-content {
+      max-width: 56rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-tagline {
+      color: var(--muted-foreground);
+      margin-bottom: 2rem;
+    }
+
+    .footer-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .footer-github:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    .hashtags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .hashtag {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      background: rgba(30, 41, 59, 0.3);
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+
+    .hashtag:hover {
+      color: var(--primary);
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .footer-credits {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .footer-credits p {
+      margin-bottom: 0.5rem;
+    }
+
+    .heart {
+      color: #ef4444;
+    }
+
+    /* ========== SVG ICONS ========== */
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .icon-lg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .icon-xl {
+      width: 2rem;
+      height: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HERO ========== -->
+  <section id="hero">
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+    
+    <div class="hero-content">
+      <h1 class="hero-logo text-gradient">ATLAS</h1>
+      <div class="hero-underline"></div>
+      <p class="hero-tagline">Decentralized AI Infrastructure for Everyone</p>
+      <p class="hero-description">
+        A decentralized IaaS platform for fine-tuning and serving AI models.<br>
+        Blockchain-coordinated, community-powered, open to all.
+      </p>
+      <div class="hero-buttons">
+        <a href="https://github.com/iamkyr0/atlas" target="_blank" class="btn btn-primary">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          View on GitHub
+        </a>
+        <a href="#get-involved" class="btn btn-secondary">
+          <svg class="icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run a Node
+        </a>
+        <a href="#get-involved" class="btn btn-ghost">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Contribute
+        </a>
+      </div>
+    </div>
+    
+    <div class="scroll-indicator">
+      <div class="scroll-indicator-inner">
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHY ATLAS ========== -->
+  <section id="why-atlas">
+    <div class="container">
+      <h2 class="section-title">Why <span class="text-gradient">Atlas</span>?</h2>
+      <p class="section-subtitle">We believe AI infrastructure should be open, fair, and accessible to everyone—not locked behind corporate walls.</p>
+      
+      <div class="values-grid">
+        <div class="glass-card value-card">
+          <div class="value-icon cyan">
+            <svg class="icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="value-title">Decentralized</h3>
+          <p class="value-description">No single point of failure. The network is owned by everyone who participates.</p>
+        </div>
+        
+        <div class="glass-card value-card">
+          <div class="value-icon purple">
+            <svg class="icon-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="value-title">Privacy-First</h3>
+          <p class="value-description">Your data stays yours. Encrypted datasets and federated learning by default.</p>
+        </div>
+        
+        <div class="glass-card value-card">
+          <div class="value-icon cyan">
+            <svg class="icon-lg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="value-title">Open Participation</h3>
+          <p class="value-description">Anyone can run a node, contribute compute, and earn rewards.</p>
+        </div>
+        
+        <div class="glass-card value-card">
+          <div class="value-icon purple">
+            <svg class="icon-lg" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <h3 class="value-title">Blockchain Transparency</h3>
+          <p class="value-description">Cosmos SDK coordinates jobs and rewards. Everything on-chain, fully auditable.</p>
+        </div>
+        
+        <div class="glass-card value-card">
+          <div class="value-icon cyan">
+            <svg class="icon-lg" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          </div>
+          <h3 class="value-title">Infinitely Scalable</h3>
+          <p class="value-description">The network grows with the community. More nodes = more power for everyone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Core <span class="text-gradient">Features</span></h2>
+      <p class="section-subtitle">Everything you need to train, fine-tune, and serve AI models—without the centralized middleman.</p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Decentralized Training</h3>
+              <p class="feature-description">Distribute training across a global network of nodes. No single bottleneck.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 3.1-1.6 5.8-4 7.4V22H7v-3.6A9 9 0 0 1 12 2z"/><path d="M12 2v6"/><path d="M15.4 5.4L12 8"/><path d="M18 9h-6"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Federated Learning</h3>
+              <p class="feature-description">Train on distributed data without ever moving it. Privacy by design.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.8V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"/><polyline points="2.32 6.16 12 11 21.68 6.16"/><line x1="12" y1="22.76" x2="12" y2="11"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">LoRA Fine-Tuning</h3>
+              <p class="feature-description">Efficient adapter-based fine-tuning that works across the network.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Model Serving</h3>
+              <p class="feature-description">HTTP & gRPC endpoints for inference. Deploy and serve with ease.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Inference Network</h3>
+              <p class="feature-description">LLM, Vision, Speech, Embeddings—all supported out of the box.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">IPFS Storage</h3>
+              <p class="feature-description">Decentralized model and dataset storage. Content-addressed, permanent.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">P2P Communication</h3>
+              <p class="feature-description">Nodes communicate directly via libp2p. Fast, resilient, censorship-resistant.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Fault Tolerance</h3>
+              <p class="feature-description">Automatic failover and job recovery. The network keeps running.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+            </div>
+            <div>
+              <h3 class="feature-title">Reward Tracking</h3>
+              <p class="feature-description">On-chain rewards for compute contributions. Get paid for your resources.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ARCHITECTURE ========== -->
+  <section id="architecture">
+    <div class="container">
+      <h2 class="section-title">How It <span class="text-gradient">Works</span></h2>
+      <p class="section-subtitle">A simple overview of how clients, nodes, and the blockchain interact.</p>
+      
+      <div class="glass-card architecture-diagram">
+        <div class="arch-grid">
+          <div class="arch-node">
+            <div class="arch-box primary">
+              <span class="arch-emoji">🐍</span>
+              <h3 class="arch-title">Client SDK</h3>
+              <p class="arch-subtitle">Python / CLI</p>
+            </div>
+            <p class="arch-description">Submit jobs, upload datasets, request inference</p>
+          </div>
+          
+          <div class="arch-arrows">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <svg class="icon arch-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <span class="arch-arrow-label">IPFS / Pub-Sub</span>
+              <svg class="icon arch-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="arch-ipfs">
+              <span style="font-size: 1.5rem; margin-bottom: 0.25rem;">📦</span>
+              <span class="arch-title" style="font-size: 0.875rem;">IPFS</span>
+              <span class="arch-subtitle" style="font-size: 0.75rem;">Storage Layer</span>
+            </div>
+          </div>
+          
+          <div class="arch-node">
+            <div class="arch-box muted">
+              <span class="arch-emoji">⚡</span>
+              <h3 class="arch-title">Compute Nodes</h3>
+              <p class="arch-subtitle">Go / GPU Workers</p>
+            </div>
+            <p class="arch-description">Train, fine-tune, serve models</p>
+          </div>
+        </div>
+        
+        <div class="arch-blockchain">
+          <svg class="icon-lg arch-arrow" style="margin-bottom: 1rem;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          <div class="arch-blockchain-box">
+            <span class="arch-emoji">⛓️</span>
+            <h3 class="arch-title">Cosmos Blockchain</h3>
+            <p class="arch-subtitle" style="text-align: center;">10 modules for jobs, rewards, governance, staking, and more</p>
+          </div>
+        </div>
+        
+        <div class="tech-pills">
+          <span class="tech-pill">Go 1.21+</span>
+          <span class="tech-pill">Python 3.10+</span>
+          <span class="tech-pill">Cosmos SDK</span>
+          <span class="tech-pill">IPFS</span>
+          <span class="tech-pill">libp2p</span>
+          <span class="tech-pill">gRPC</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ROADMAP ========== -->
+  <section id="roadmap">
+    <div class="container">
+      <h2 class="section-title"><span class="text-gradient">Roadmap</span></h2>
+      <p class="section-subtitle">Where we are and where we're headed. This is a community effort—milestones shift as we learn and grow together.</p>
+      
+      <div class="roadmap-container">
+        <div class="roadmap-line"></div>
+        
+        <div class="milestone done">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: var(--primary);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Alpha Node</h3>
+              <span class="milestone-badge done">Complete</span>
+            </div>
+            <p class="milestone-description">Core node implementation with basic compute</p>
+          </div>
+        </div>
+        
+        <div class="milestone in-progress">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: var(--secondary); animation: pulse 2s ease-in-out infinite;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Decentralized Training</h3>
+              <span class="milestone-badge in-progress">In Progress</span>
+            </div>
+            <p class="milestone-description">Distributed training across multiple nodes</p>
+          </div>
+        </div>
+        
+        <div class="milestone upcoming">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: rgba(148, 163, 184, 0.5);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Model Registry</h3>
+            </div>
+            <p class="milestone-description">On-chain registry for published models</p>
+          </div>
+        </div>
+        
+        <div class="milestone upcoming">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: rgba(148, 163, 184, 0.5);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Reward Mechanism</h3>
+            </div>
+            <p class="milestone-description">Token rewards for compute contributions</p>
+          </div>
+        </div>
+        
+        <div class="milestone upcoming">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: rgba(148, 163, 184, 0.5);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Governance Framework</h3>
+            </div>
+            <p class="milestone-description">Community voting and proposal system</p>
+          </div>
+        </div>
+        
+        <div class="milestone upcoming">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: rgba(148, 163, 184, 0.5);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">Cross-node Optimization</h3>
+            </div>
+            <p class="milestone-description">Intelligent job routing and load balancing</p>
+          </div>
+        </div>
+        
+        <div class="milestone upcoming">
+          <div class="milestone-indicator">
+            <svg class="icon" style="color: rgba(148, 163, 184, 0.5);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-header">
+              <h3 class="milestone-title">DAO Launch</h3>
+            </div>
+            <p class="milestone-description">Full decentralized governance</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GET INVOLVED ========== -->
+  <section id="get-involved">
+    <div class="container">
+      <h2 class="section-title">Get <span class="text-gradient">Involved</span></h2>
+      <p class="section-subtitle">Atlas is built by the community, for the community. Here's how you can participate.</p>
+      
+      <div class="pathways-grid">
+        <div class="glass-card pathway-card">
+          <div class="pathway-icon cyan">
+            <svg class="icon-xl" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <h3 class="pathway-title">Run a Node</h3>
+          <p class="pathway-description">Contribute compute power to the network and earn rewards. All you need is a machine with a GPU.</p>
+          <a href="https://github.com/iamkyr0/atlas#quick-start" target="_blank" class="btn btn-secondary pathway-btn cyan">Node Setup Guide</a>
+        </div>
+        
+        <div class="glass-card pathway-card">
+          <div class="pathway-icon purple">
+            <svg class="icon-xl" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <h3 class="pathway-title">Submit Jobs</h3>
+          <p class="pathway-description">Use the Python SDK to fine-tune models or run inference on the decentralized network.</p>
+          <a href="https://github.com/iamkyr0/atlas#python-sdk" target="_blank" class="btn btn-secondary pathway-btn purple">SDK Documentation</a>
+        </div>
+        
+        <div class="glass-card pathway-card">
+          <div class="pathway-icon cyan">
+            <svg class="icon-xl" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3 class="pathway-title">Contribute Code</h3>
+          <p class="pathway-description">Help build Atlas! We welcome contributions to the node, blockchain modules, SDK, and docs.</p>
+          <a href="https://github.com/iamkyr0/atlas/blob/main/CONTRIBUTING.md" target="_blank" class="btn btn-secondary pathway-btn cyan">Contributing Guide</a>
+        </div>
+      </div>
+      
+      <div class="quick-links">
+        <a href="https://github.com/iamkyr0/atlas" target="_blank" class="quick-link">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="https://github.com/iamkyr0/atlas#readme" target="_blank" class="quick-link">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Documentation
+        </a>
+        <a href="https://github.com/iamkyr0/atlas/discussions" target="_blank" class="quick-link">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Discussions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VISION ========== -->
+  <section id="vision">
+    <div class="container">
+      <div class="vision-content">
+        <blockquote class="vision-quote">
+          <span class="vision-quote-mark">"</span>
+          <p class="vision-quote-text">
+            Imagine a world where AI infrastructure is as
+            <span class="text-gradient"> open and accessible </span>
+            as the internet itself.
+          </p>
+        </blockquote>
+        
+        <div class="vision-paragraphs">
+          <p>
+            Just like TCP/IP created a universal language for computers to talk to each other,
+            Atlas aims to be the <strong>universal layer for AI computation</strong>.
+          </p>
+          <p>
+            A world where anyone—students, researchers, hobbyists, startups—can access
+            the same AI infrastructure that was once reserved for tech giants.
+            Where your GPU can earn you rewards while you sleep.
+            Where models are trained collaboratively, transparently, and fairly.
+          </p>
+          <p>
+            This isn't just about technology. It's about <strong>democratizing intelligence</strong>.
+          </p>
+        </div>
+        
+        <div class="vision-closing">
+          <p class="vision-closing-text text-gradient">"Intelligence should belong to everyone."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <h3 class="footer-logo text-gradient">ATLAS</h3>
+        <p class="footer-tagline">Decentralized AI Infrastructure for Everyone</p>
+        
+        <a href="https://github.com/iamkyr0/atlas" target="_blank" class="footer-github">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          github.com/iamkyr0/atlas
+        </a>
+        
+        <div class="hashtags">
+          <span class="hashtag">#OpenSource</span>
+          <span class="hashtag">#DecentralizedAI</span>
+          <span class="hashtag">#FederatedLearning</span>
+          <span class="hashtag">#Blockchain</span>
+          <span class="hashtag">#AIInfrastructure</span>
+          <span class="hashtag">#Web3</span>
+          <span class="hashtag">#AtlasAI</span>
+          <span class="hashtag">#DistributedComputing</span>
+          <span class="hashtag">#AIForEveryone</span>
+        </div>
+        
+        <div class="footer-credits">
+          <p>Built with <span class="heart">❤</span> by the Atlas community</p>
+          <p>MIT License • © 2024 Atlas Contributors</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Particle Animation Script -->
+  <script>
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    
+    const colors = [
+      'rgba(0, 255, 255, ',
+      'rgba(138, 92, 246, ',
+      'rgba(59, 130, 246, '
+    ];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createParticles() {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 15000);
+      
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random() * 0.5 + 0.2,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + p.opacity + ')';
+        ctx.fill();
+
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = 'rgba(0, 255, 255, ' + ((1 - dist / 150) * 0.15) + ')';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        });
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      createParticles();
+    });
+
+    resize();
+    createParticles();
+    animate();
+  </script>
+
+</body>
+</html>

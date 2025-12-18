@@ -4,20 +4,20 @@
 [![Go Version](https://img.shields.io/badge/Go-1.21+-blue.svg)](https://golang.org/)
 [![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 
-**Atlas** adalah platform Infrastructure-as-a-Service (IaaS) terdesentralisasi untuk fine-tuning dan serving model AI. Platform ini menggunakan blockchain untuk koordinasi dan reward distribution, dengan node-node yang berkontribusi compute dan storage resources seperti sistem mining cryptocurrency.
+**Atlas** is a decentralized Infrastructure-as-a-Service (IaaS) platform for fine-tuning and serving AI models. The platform uses blockchain for coordination and reward distribution, with nodes contributing compute and storage resources similar to cryptocurrency mining systems.
 
 ## 🌟 Features
 
-- **Decentralized Training**: Fine-tune AI models menggunakan distributed compute nodes
-- **Federated Learning**: Privacy-preserving distributed training dengan gradient aggregation
-- **LoRA Fine-Tuning**: Efficient fine-tuning dengan Low-Rank Adaptation
-- **Model Serving**: Serve models untuk inference via HTTP/gRPC API
-- **Inference Network**: Distributed network untuk LLM, Vision, Speech-to-text, dan Embedding services
-- **Blockchain Coordination**: Cosmos SDK blockchain untuk job coordination dan reward distribution
-- **IPFS Storage**: Decentralized storage untuk datasets, models, dan checkpoints
-- **P2P Communication**: Direct peer-to-peer communication tanpa API Gateway
-- **Auto Resource Detection**: Automatic detection CPU, GPU, RAM, storage, dan network speed
-- **Fault Tolerance**: Automatic task reassignment, checkpoint recovery, dan graceful degradation
+- **Decentralized Training**: Fine-tune AI models using distributed compute nodes
+- **Federated Learning**: Privacy-preserving distributed training with gradient aggregation
+- **LoRA Fine-Tuning**: Efficient fine-tuning with Low-Rank Adaptation
+- **Model Serving**: Serve models for inference via HTTP/gRPC API
+- **Inference Network**: Distributed network for LLM, Vision, Speech-to-text, and Embedding services
+- **Blockchain Coordination**: Cosmos SDK blockchain for job coordination and reward distribution
+- **IPFS Storage**: Decentralized storage for datasets, models, and checkpoints
+- **P2P Communication**: Direct peer-to-peer communication without API Gateway
+- **Auto Resource Detection**: Automatic detection of CPU, GPU, RAM, storage, and network speed
+- **Fault Tolerance**: Automatic task reassignment, checkpoint recovery, and graceful degradation
 
 ## 🏗️ Architecture
 
@@ -56,12 +56,12 @@
 
 ### Core Components
 
-- **Blockchain Layer** (`chain/`): Cosmos SDK dengan 10 custom modules
-- **Compute Node** (`node/`): Distributed compute nodes untuk training & inference
+- **Blockchain Layer** (`chain/`): Cosmos SDK with 10 custom modules
+- **Compute Node** (`node/`): Distributed compute nodes for training & inference
 - **Federated Learning** (`federated-learning/`): Privacy-preserving distributed training
-- **LoRA** (`lora/`): Efficient fine-tuning dengan Low-Rank Adaptation
+- **LoRA** (`lora/`): Efficient fine-tuning with Low-Rank Adaptation
 - **Storage Layer** (`storage/`): IPFS-based decentralized storage
-- **Client SDK** (`sdk/`): Python SDK dengan CLI dan daemon mode
+- **Client SDK** (`sdk/`): Python SDK with CLI and daemon mode
 
 ## 🚀 Quick Start
 
@@ -69,9 +69,9 @@
 
 - **Go** 1.21+
 - **Python** 3.10+
-- **Docker** (optional, untuk containerized deployment)
-- **IPFS node** (atau gunakan Infura/IPFS gateway)
-- **Cosmos SDK** (untuk blockchain)
+- **Docker** (optional, for containerized deployment)
+- **IPFS node** (or use Infura/IPFS gateway)
+- **Cosmos SDK** (for blockchain)
 
 ### Installation
 
@@ -88,14 +88,14 @@ go mod download
 cd ../sdk/python
 pip install -r requirements.txt
 
-# Start IPFS node (atau gunakan Infura)
+# Start IPFS node (or use Infura)
 ipfs daemon
 ```
 
 ### Docker Compose (Recommended)
 
 ```bash
-# Start semua services (chain, IPFS, node)
+# Start all services (chain, IPFS, node)
 docker-compose up -d
 
 # Check status
@@ -104,7 +104,7 @@ docker-compose ps
 
 ## 📖 Usage Guide
 
-### 🎯 Sebagai Client (Menggunakan Atlas untuk Fine-Tuning)
+### 🎯 As a Client (Using Atlas for Fine-Tuning)
 
 #### 1. Install Python SDK
 
@@ -119,7 +119,7 @@ pip install -r requirements.txt
 from atlas import AtlasClient
 
 client = AtlasClient(
-    ipfs_api_url="/ip4/127.0.0.1/tcp/5001",  # atau "https://ipfs.infura.io:5001"
+    ipfs_api_url="/ip4/127.0.0.1/tcp/5001",  # or "https://ipfs.infura.io:5001"
     chain_grpc_url="localhost:9090",  # Format: host:port
     creator="your_wallet_address"
 )
@@ -169,13 +169,13 @@ async def train_model():
 asyncio.run(train_model())
 ```
 
-#### 4. Menggunakan Model untuk Inference
+#### 4. Using Model for Inference
 
 ```python
 from atlas.serving.predictor import Predictor
 from atlas.serving.loader import ModelLoader
 
-# Load model dari IPFS (dengan caching)
+# Load model from IPFS (with caching)
 loader = ModelLoader(ipfs_api_url="/ip4/127.0.0.1/tcp/5001")
 model_path = loader.load(model_cid="QmXXX...")
 
@@ -185,7 +185,7 @@ predictor = Predictor(model_path=model_path)
 # Run inference
 result = predictor.predict(
     input_data="Hello, how are you?",
-    model_type="llm",  # atau "vision", "speech", "embedding", "auto"
+    model_type="llm",  # or "vision", "speech", "embedding", "auto"
     options={
         "max_length": 100,
         "temperature": 0.7
@@ -195,13 +195,13 @@ result = predictor.predict(
 print(f"Result: {result}")
 ```
 
-#### 5. Serve Model sebagai HTTP Server
+#### 5. Serve Model as HTTP Server
 
 ```bash
 # Via CLI
 atlas serve-model model-123 --port 8000
 
-# Atau via Python
+# Or via Python
 from atlas.serving.server import ModelServer
 
 server = ModelServer(chain_client=chain_client)
@@ -231,14 +231,14 @@ atlas serve-model model-123 --port 8000
 atlas daemon --port 8080
 ```
 
-### 🖥️ Sebagai Node (Menyediakan Compute & Storage)
+### 🖥️ As a Node (Providing Compute & Storage)
 
 #### 1. Prerequisites
 
 - Go 1.21+
 - Docker
 - IPFS node
-- GPU (optional, untuk training lebih cepat)
+- GPU (optional, for faster training)
 - Minimum 8GB RAM
 - Minimum 100GB storage
 
@@ -272,7 +272,7 @@ go build -o atlas-node cmd/node/main.go
   --address your_wallet_address
 ```
 
-#### 4. Register Node ke Blockchain
+#### 4. Register Node to Blockchain
 
 ```bash
 # Register via blockchain CLI
@@ -336,7 +336,7 @@ job = await client.submit_job(
 # Upload custom training script
 script_cid = await client.upload_dataset("custom_train.py")
 
-# Submit job dengan custom script
+# Submit job with custom script
 job = await client.submit_job(
     model_id="model-123",
     dataset_cid=dataset_cid,
@@ -350,7 +350,7 @@ job = await client.submit_job(
 ### Private Datasets
 
 ```python
-# Upload dengan encryption
+# Upload with encryption
 dataset_cid = await client.upload_dataset(
     "private_dataset.zip",
     encrypt=True,
@@ -424,11 +424,11 @@ for job in jobs:
 # Start IPFS
 ipfs daemon
 
-# Start chain (dalam terminal terpisah)
+# Start chain (in separate terminal)
 cd chain
 atlasd start
 
-# Start node (dalam terminal terpisah)
+# Start node (in separate terminal)
 cd node
 ./atlas-node start
 ```
@@ -436,7 +436,7 @@ cd node
 ### Docker Compose
 
 ```bash
-# Start semua services
+# Start all services
 docker-compose up -d
 
 # Check logs
@@ -461,12 +461,12 @@ kubectl apply -f k8s/node-deployment.yaml
 
 ## 🔐 Security
 
-- **Encryption**: Private datasets di-encrypt sebelum upload ke IPFS
-- **Private Networks**: Support untuk private IPFS networks
-- **Proof of Computation**: Cryptographic proofs untuk task completion
-- **Validation**: Content hash validation untuk shards
-- **Reputation System**: Node reputation untuk trust management
-- **Authentication**: API key dan JWT support
+- **Encryption**: Private datasets are encrypted before upload to IPFS
+- **Private Networks**: Support for private IPFS networks
+- **Proof of Computation**: Cryptographic proofs for task completion
+- **Validation**: Content hash validation for shards
+- **Reputation System**: Node reputation for trust management
+- **Authentication**: API key and JWT support
 - **Authorization**: RBAC (Role-Based Access Control)
 
 ## 🛠️ Configuration
@@ -511,14 +511,14 @@ heartbeat:
 
 ### Main Documentation
 
-- **[Client Usage Guide](client-usage.md)** - Panduan lengkap untuk menggunakan Atlas sebagai client
-- **[Node Usage Guide](node-usage.md)** - Panduan untuk menjalankan compute nodes
-- **[Architecture](architecture.md)** - Overview arsitektur sistem
-- **[Developer Guide](developer-guide.md)** - Panduan untuk developers
+- **[Client Usage Guide](client-usage.md)** - Complete guide for using Atlas as a client
+- **[Node Usage Guide](node-usage.md)** - Guide for running compute nodes
+- **[Architecture](architecture.md)** - System architecture overview
+- **[Developer Guide](developer-guide.md)** - Guide for developers
 
 ### Component Documentation
 
-- **[Chain](chain/README.md)** - Blockchain modules dan implementation
+- **[Chain](chain/README.md)** - Blockchain modules and implementation
 - **[Node](node/README.md)** - Compute node implementation
 - **[Federated Learning](federated-learning/README.md)** - FL implementation
 - **[LoRA](lora/README.md)** - LoRA fine-tuning
@@ -544,21 +544,21 @@ pytest -v
 
 ### Connection Issues
 
-- **IPFS tidak connect**: Check `ipfs id` dan pastikan IPFS daemon running
-- **Chain gRPC error**: Verify chain gRPC URL dan port (default: 9090)
-- **Network timeout**: Check firewall rules dan network connectivity
+- **IPFS not connecting**: Check `ipfs id` and ensure IPFS daemon is running
+- **Chain gRPC error**: Verify chain gRPC URL and port (default: 9090)
+- **Network timeout**: Check firewall rules and network connectivity
 
 ### Job Failures
 
-- **Job stuck**: Check node status dan resource availability
-- **Model download failed**: Verify model CID di IPFS network
-- **Training error**: Check task logs di work directory
+- **Job stuck**: Check node status and resource availability
+- **Model download failed**: Verify model CID in IPFS network
+- **Training error**: Check task logs in work directory
 
 ### Node Issues
 
-- **Node tidak receive tasks**: Verify node registration dan status "online"
+- **Node not receiving tasks**: Verify node registration and status "online"
 - **Resource exhaustion**: Check CPU/GPU/Memory utilization
-- **Heartbeat timeout**: Verify network connectivity ke blockchain
+- **Heartbeat timeout**: Verify network connectivity to blockchain
 
 ## 🤝 Contributing
 
@@ -576,9 +576,9 @@ MIT License - see LICENSE file for details
 
 ## 🙏 Acknowledgments
 
-- Cosmos SDK untuk blockchain framework
-- IPFS untuk decentralized storage
-- PyTorch dan TensorFlow untuk ML frameworks
+- Cosmos SDK for blockchain framework
+- IPFS for decentralized storage
+- PyTorch and TensorFlow for ML frameworks
 
 ---
 

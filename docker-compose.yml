@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  ipfs:
+    image: ipfs/kubo:latest
+    container_name: atlas-ipfs
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ipfs-data:/data/ipfs
+    environment:
+      - IPFS_PROFILE=server
+
+  chain:
+    build:
+      context: ./chain
+      dockerfile: Dockerfile
+    container_name: atlas-chain
+    ports:
+      - "26656:26656"  # P2P port
+      - "26657:26657"  # RPC port
+      - "1317:1317"    # REST API port
+      - "9090:9090"    # gRPC port (for SDK client)
+    volumes:
+      - chain-data:/root/.atlas
+    depends_on:
+      - ipfs
+    environment:
+      - IPFS_API_URL=http://ipfs:5001
+
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: atlas-node
+    ports:
+      - "8081:8081"
+    volumes:
+      - node-data:/data
+    depends_on:
+      - ipfs
+      - chain
+    environment:
+      - IPFS_API_URL=http://ipfs:5001
+      - CHAIN_RPC_URL=http://chain:26657
+
+volumes:
+  ipfs-data:
+  chain-data:
+  node-data:
+

@@ -1,0 +1,26 @@
+package keeper
+
+import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+	computekeeper "github.com/atlas/chain/x/compute/keeper"
+)
+
+type Keeper struct {
+	cdc codec.BinaryCodec
+	storeKey storetypes.StoreKey
+	memKey storetypes.StoreKey
+	computeKeeper computekeeper.Keeper
+}
+
+func NewKeeper(
+	cdc codec.BinaryCodec,
+	storeKey, memKey storetypes.StoreKey,
+	computeKeeper computekeeper.Keeper,
+) *Keeper {
+	return &Keeper{
+		cdc: cdc, storeKey: storeKey, memKey: memKey,
+		computeKeeper: computeKeeper,
+	}
+}
+

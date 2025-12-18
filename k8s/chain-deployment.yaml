@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-chain
+  namespace: atlas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atlas-chain
+  template:
+    metadata:
+      labels:
+        app: atlas-chain
+    spec:
+      containers:
+      - name: chain
+        image: atlas/chain:latest
+        ports:
+        - containerPort: 26656
+        - containerPort: 26657
+        - containerPort: 1317
+        - containerPort: 9090
+        env:
+        - name: IPFS_API_URL
+          value: "http://atlas-ipfs:5001"
+        volumeMounts:
+        - name: chain-data
+          mountPath: /root/.atlas
+      volumes:
+      - name: chain-data
+        persistentVolumeClaim:
+          claimName: chain-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: atlas-chain
+  namespace: atlas
+spec:
+  selector:
+    app: atlas-chain
+  ports:
+  - name: rpc
+    port: 26657
+  - name: grpc
+    port: 9090
+  - name: rest
+    port: 1317
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chain-data-pvc
+  namespace: atlas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+

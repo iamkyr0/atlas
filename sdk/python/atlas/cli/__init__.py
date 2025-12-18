@@ -1,0 +1,2 @@
+"""Atlas CLI package"""
+

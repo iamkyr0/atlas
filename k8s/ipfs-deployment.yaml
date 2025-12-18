@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: atlas-ipfs
+  namespace: atlas
+spec:
+  serviceName: atlas-ipfs
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atlas-ipfs
+  template:
+    metadata:
+      labels:
+        app: atlas-ipfs
+    spec:
+      containers:
+      - name: ipfs
+        image: ipfs/kubo:latest
+        ports:
+        - containerPort: 4001
+        - containerPort: 5001
+        - containerPort: 8080
+        env:
+        - name: IPFS_PROFILE
+          value: "server"
+        volumeMounts:
+        - name: ipfs-data
+          mountPath: /data/ipfs
+  volumeClaimTemplates:
+  - metadata:
+      name: ipfs-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: atlas-ipfs
+  namespace: atlas
+spec:
+  selector:
+    app: atlas-ipfs
+  ports:
+  - name: api
+    port: 5001
+  - name: gateway
+    port: 8080
+

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atlas-node
+  namespace: atlas
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: atlas-node
+  template:
+    metadata:
+      labels:
+        app: atlas-node
+    spec:
+      containers:
+      - name: node
+        image: atlas/node:latest
+        ports:
+        - containerPort: 8081
+        env:
+        - name: IPFS_API_URL
+          value: "http://atlas-ipfs:5001"
+        - name: CHAIN_RPC_URL
+          value: "http://atlas-chain:26657"
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: atlas-node
+  namespace: atlas
+spec:
+  selector:
+    app: atlas-node
+  ports:
+  - port: 8081
+

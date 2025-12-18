@@ -573,7 +573,6 @@ MIT License - see LICENSE file for details
 - **Repository**: [GitHub](https://github.com/iamkyr0/atlas)
 - **Documentation**: See [Documentation](#-documentation) section above
 - **Issues**: [GitHub Issues](https://github.com/iamkyr0/atlas/issues)
-- **Author LinkedIn**: [Audi Afiary](https://www.linkedin.com/in/audi-afiary/)
 
 ## 🙏 Acknowledgments
 
@@ -584,5 +583,3 @@ MIT License - see LICENSE file for details
 ---
 
 **Made with ❤️ by the Atlas Team**
-
-**Author**: [Audi Afiary](https://www.linkedin.com/in/audi-afiary/) - Senior Java Developer | AI & Low-code enthusiast

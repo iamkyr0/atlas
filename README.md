@@ -77,7 +77,7 @@
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/iamkyr0/atlas.git
 cd atlas
 
 # Setup Go dependencies
@@ -570,9 +570,9 @@ MIT License - see LICENSE file for details
 
 ## 🔗 Links
 
-- **Repository**: [GitHub](https://github.com/atlas/atlas)
-- **Documentation**: [Docs](https://docs.atlas.ai)
-- **Discord**: [Community](https://discord.gg/atlas)
+- **Repository**: [GitHub](https://github.com/iamkyr0/atlas)
+- **Documentation**: See [Documentation](#-documentation) section above
+- **Issues**: [GitHub Issues](https://github.com/iamkyr0/atlas/issues)
 
 ## 🙏 Acknowledgments
 

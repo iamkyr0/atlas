@@ -219,33 +219,215 @@ atlas/
 └── tests/            # Integration tests
 ```
 
-## Areas We Need Help
+## Current Priorities
 
-### High Priority
+Based on our codebase analysis, here are the current high-priority tasks that need immediate attention:
 
-- **Frontend/UI**: Web interface for the platform
-- **Testing**: More comprehensive test coverage
-- **Documentation**: Tutorials, guides, and examples
-- **Performance**: Optimizing resource usage
-- **Error Handling**: Better error messages and recovery
+### 🔴 CRITICAL Priority (Blocking Core Functionality)
 
-### Medium Priority
+#### 1. Protobuf Generation & gRPC Client
+**Status**: Not Started | **Impact**: HIGH | **Effort**: Medium (1-2 days)
 
-- **Security**: Security audits and improvements
-- **DevOps**: CI/CD pipelines and automation
-- **Monitoring**: Better observability and metrics
-- **Internationalization**: Multi-language support
-- **Accessibility**: Improve accessibility features
+**Problem**: 
+- Python SDK (`sdk/python/atlas/chain/client.py`) requires protobuf stubs that haven't been generated
+- All methods throw `NotImplementedError` when stubs are missing
+- Node blockchain client (`node/validator/blockchain_client.go`) is still a placeholder
 
-### Good First Issues
+**Files to Fix**:
+- `sdk/python/atlas/chain/client.py` - All methods need protobuf stubs
+- `node/validator/blockchain_client.go` - All methods are placeholders
+- `node/cmd/node/main.go` - `registerNodeOnBlockchain()` function
 
-Look for issues labeled `good first issue` - these are perfect for newcomers:
+**How to Help**:
+```bash
+# Generate protobuf stubs for Python SDK
+cd chain
+# Generate .proto files from Cosmos SDK modules
+# Generate Python stubs
+python -m grpc_tools.protoc -I. --python_out=../sdk/python/atlas/chain --grpc_python_out=../sdk/python/atlas/chain *.proto
+```
+
+#### 2. Node Blockchain Client Implementation
+**Status**: Not Started | **Impact**: HIGH | **Effort**: High (2-3 days)
+
+**Problem**:
+- `HTTPBlockchainClient` in `node/validator/blockchain_client.go` is a placeholder
+- Nodes cannot query blockchain for assignment validation
+- Node registration still returns errors
+
+**Files to Fix**:
+- `node/validator/blockchain_client.go` - Implement all methods
+- `node/cmd/node/main.go` - Fix `registerNodeOnBlockchain()`
+
+**How to Help**:
+- Implement gRPC client in Go for node
+- Or implement HTTP REST client using Cosmos SDK REST API
+- Implement `registerNodeOnBlockchain()` with gRPC/HTTP client
+
+### 🟠 HIGH Priority (Important Features)
+
+#### 3. Model Registration via gRPC
+**Status**: Not Started | **Impact**: MEDIUM | **Effort**: Low (1 day)
+
+**Problem**: 
+- `register_model()` in `sdk/python/atlas/chain/client.py` line 222 still throws `NotImplementedError`
+
+**Files to Fix**:
+- `sdk/python/atlas/chain/client.py` - Implement `register_model()` method
+- Add to protobuf message types
+- Update keeper to handle model registration
+
+#### 4. Model Sharding by Layers
+**Status**: Not Started | **Impact**: MEDIUM | **Effort**: Medium (1-2 days)
+
+**Problem**:
+- `SplitModelByLayers()` in `storage/sharding/` is still a placeholder
+- Strategy "layer" is not implemented
+
+**Files to Fix**:
+- `storage/sharding/splitter.go` - Implement `SplitModelByLayers()`
+- `storage/sharding/manager.go` - Update shard manager
+
+**How to Help**:
+- Implement parsing of model layers (PyTorch/TensorFlow)
+- Split model based on layer boundaries
+- Update shard manager to support layer-based sharding
+
+#### 5. Integration Tests
+**Status**: Partial | **Impact**: HIGH | **Effort**: High (2-3 days)
+
+**Problem**:
+- `tests/integration/test_job_submission.py` - Many `NotImplementedError`
+- `tests/integration/test_node_failure.py` - Many `NotImplementedError`
+- End-to-end flow is not tested
+
+**Files to Fix**:
+- `tests/integration/test_job_submission.py` - Fix all tests
+- `tests/integration/test_node_failure.py` - Fix all tests
+- Add end-to-end test with local chain + IPFS
+
+**How to Help**:
+- Fix integration tests with mocks/stubs
+- Implement end-to-end test with local chain + IPFS
+- Test full job lifecycle
+
+#### 6. Error Handling & Recovery
+**Status**: Partial | **Impact**: MEDIUM | **Effort**: Medium (2 days)
+
+**Problem**:
+- Many `NotImplementedError` without fallback mechanisms
+- Network failure handling is not robust
+- Task failure recovery needs improvement
+
+**Files to Fix**:
+- All files with `NotImplementedError` - Add fallback mechanisms
+- Improve retry logic with exponential backoff
+- Better error messages and logging
+
+#### 7. LoRA Training Script
+**Status**: Partial | **Impact**: MEDIUM | **Effort**: Medium (1-2 days)
+
+**Problem**:
+- `lora/training/trainer.go` line 132-175 - Training script is still simulated
+- No actual LoRA training logic
+- Comment says: "In production, this would..."
+
+**Files to Fix**:
+- `lora/training/trainer.go` - Implement actual LoRA training
+
+**How to Help**:
+- Implement actual LoRA training with PyTorch
+- Load base model and apply LoRA adapters
+- Train only LoRA parameters
+- Save updated weights
+
+### 🟡 MEDIUM Priority (Important but Can Wait)
+
+#### 8. Security Audit
+**Status**: Not Started | **Impact**: MEDIUM | **Effort**: High (3-5 days)
+
+- Input validation needs to be stricter
+- API key management needs review
+- Encryption key management needs improvement
+
+#### 9. Test Coverage
+**Status**: Partial | **Impact**: LOW | **Effort**: High (3-5 days)
+
+- Some modules don't have unit tests
+- Test coverage < 80% for some components
+- Target: > 80% coverage for all modules
+
+#### 10. Performance Optimization
+**Status**: Partial | **Impact**: LOW | **Effort**: Medium (2-3 days)
+
+- Resource allocation could be more efficient
+- Model caching strategy needs improvement
+- Network optimization for IPFS
+
+#### 11. Documentation
+**Status**: Partial | **Impact**: LOW | **Effort**: Low (1-2 days)
+
+- API documentation is incomplete
+- Deployment guides need more detail
+- Troubleshooting guides need to be added
+
+### 🟢 Good First Issues
+
+Perfect for newcomers looking to get started:
 
 - Small bug fixes
 - Documentation improvements
 - Test additions
 - Code cleanup
 - Minor feature additions
+
+Look for issues labeled `good first issue` on GitHub.
+
+## Getting Started with Priority Tasks
+
+### Recommended Order of Implementation
+
+We recommend tackling priority tasks in this order for maximum impact:
+
+1. **Protobuf Generation** (1-2 days) - Unblocks many other features
+   - Generate protobuf stubs for Python SDK
+   - Fix all `NotImplementedError` in `chain/client.py`
+
+2. **Node Blockchain Client** (2-3 days) - Critical for node functionality
+   - Implement gRPC client in Go
+   - Fix `HTTPBlockchainClient`
+   - Fix `registerNodeOnBlockchain()`
+
+3. **Integration Tests** (2-3 days) - Ensures system reliability
+   - Fix all integration tests
+   - Setup test environment with local chain
+
+4. **LoRA Training Script** (1-2 days) - Core functionality
+   - Implement actual LoRA training
+   - Test with real model
+
+5. **Model Registration & Sharding** (2-3 days) - Important features
+   - Implement model registration
+   - Implement layer-based sharding
+
+**Total Estimated Time**: 8-13 days for critical + high priority items
+
+### How to Claim a Task
+
+1. Check if the task is already assigned in GitHub Issues
+2. Comment on the issue to claim it
+3. Create a branch: `git checkout -b fix/protobuf-generation`
+4. Work on the task following our coding standards
+5. Submit a PR with tests and documentation
+
+### Questions?
+
+If you're unsure about how to approach a priority task:
+
+- Open a GitHub Discussion to ask questions
+- Check existing issues for similar work
+- Review the codebase to understand the context
+- Reach out to maintainers for guidance
 
 ## Testing Guidelines
 
@@ -358,8 +540,7 @@ Contributors will be:
 
 - **GitHub Discussions**: For questions and discussions
 - **GitHub Issues**: For bug reports and feature requests
-- **Discord**: [Coming soon]
-- **Email**: [Your email]
+- **Repository**: [https://github.com/iamkyr0/atlas](https://github.com/iamkyr0/atlas)
 
 ## License
 
